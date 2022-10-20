@@ -6,32 +6,51 @@ import {
   Route,
 } from "react-router-dom";
 import './index.css'
+// Main pages
 import Index from "./routes/accueil";
 import Liste from "./routes/liste";
 import Plan from "./routes/plan";
 import Connexion from "./routes/connexion";
 import Inscription from "./routes/inscription";
 
+// Children pages
+import Animal from "./routes/animal/animal";
+
+// Error page
+import ErrorPage from "./error-page";
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Index />,
+    errorElement: <ErrorPage />,
   },
   {
-    path: "/liste",
+    path: "liste",
     element: <Liste />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "animal/:animalId",
+        element: <Animal />,
+        errorElement: <ErrorPage />,
+      },
+    ],
   },
   {
-    path: "/plan",
+    path: "plan",
     element: <Plan />,
+    errorElement: <ErrorPage />,
   },
   {
-    path: "/connexion",
+    path: "connexion",
     element: <Connexion />,
+    errorElement: <ErrorPage />,
   },
   {
-    path: "/inscription",
+    path: "inscription",
     element: <Inscription />,
+    errorElement: <ErrorPage />,
   },
 ]);
 
