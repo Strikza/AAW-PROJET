@@ -6,8 +6,9 @@ export default function ErrorPage() {
 
   return (
     <div id="error-page">
-      <h1>Oh non !</h1>
-      <p>Désolé, une erreur inattendue est survenue :/</p>
+      <img src="../annexe/PageErreur/OhNonCringe.jpeg"/>
+      <h1>Oh non ! Cringe !</h1>
+      <p>Une erreur inattendue est survenue :O</p>
       <p>
         <i>{error.statusText || error.message}</i>
       </p>
