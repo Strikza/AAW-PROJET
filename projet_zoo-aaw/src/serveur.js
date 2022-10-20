@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require(express)
 const { useReducer } = require('react')
 const app = express()
 const port = 3000

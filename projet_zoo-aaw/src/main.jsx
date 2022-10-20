@@ -5,11 +5,12 @@ import {
   RouterProvider,
   Route,
 } from "react-router-dom";
-//import './index.css'
+import './index.css'
 import Index from "./routes/accueil";
 import Liste from "./routes/liste";
 import Plan from "./routes/plan";
 import Connexion from "./routes/connexion";
+import Inscription from "./routes/inscription";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/connexion",
     element: <Connexion />,
+  },
+  {
+    path: "/inscription",
+    element: <Inscription />,
   },
 ]);
 
