@@ -1,0 +1,11 @@
+DROP DATABASE IF EXISTS zoo_db;
+CREATE DATABASE zoo_db;
+USE zoo_db;
+
+CREATE TABLE Test (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO Test (name) VALUES ('First Name');
