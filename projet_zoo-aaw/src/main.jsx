@@ -6,6 +6,7 @@ import {
   Route,
 } from "react-router-dom";
 import './index.css'
+
 // Main pages
 import Index from "./routes/accueil";
 import Liste from "./routes/liste";
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "animal/:animalId",
+        path: "animals/:animalId",
         element: <Animal />,
         errorElement: <ErrorPage />,
       },

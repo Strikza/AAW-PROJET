@@ -6,7 +6,7 @@ export default function Root() {
         <>
           <Menu />
           <h1>C'est la liste</h1>
-          <a href="/liste/animal/1">Numéro 1</a>
+          <a href="/liste/animals/1">Numéro 1</a>
           <div id="detail">
             <Outlet />
           </div>
