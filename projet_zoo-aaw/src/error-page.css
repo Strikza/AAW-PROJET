@@ -1,9 +1,19 @@
 #cringe{
-    height: 500px;
-    width: 500px;
+    height: 1000px;
+    width: 1000px;
+    animation-duration: .15s;
+    animation-name: clignoter;
+    animation-iteration-count: infinite;
+    transition: none;
 }
 
-body {
+@keyframes clignoter {
+     0%   { opacity:1; }
+     40%   {opacity:0; }
+     100% { opacity:1; }
+ }
+
+#error-page {
     background-color: #ff0000;
     color: #00ff00;
     text-align: center;
