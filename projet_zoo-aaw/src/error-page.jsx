@@ -6,7 +6,9 @@ export default function ErrorPage() {
 
   return (
     <div id="error-page">
-      <img src="../annexe/PageErreur/OhNonCringe.jpeg"/>
+      <div id="cringe-div">
+        <img id="cringe" src="../annexe/PageErreur/OhNonCringe.jpeg"/>
+      </div>
       <h1>Oh non ! Cringe !</h1>
       <p>Une erreur inattendue est survenue :O</p>
       <p>
