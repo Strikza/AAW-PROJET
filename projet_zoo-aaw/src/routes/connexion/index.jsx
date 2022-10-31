@@ -1,3 +1,4 @@
+import { Outlet, Link } from 'react-router-dom';
 import Menu from '../../header/menu'
 
 export default function Root() {
@@ -10,7 +11,7 @@ export default function Root() {
             <input id="password" type={"text"} placeholder="password"></input>
             <button>se connecter</button>
           </form>
-          <a href="/inscription">Pas inscrit ? Cliquez ici</a>
+          <Link to={"/inscription"}>Pas inscrit ? Cliquez ici</Link>
         </>
     );
   }

@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import Menu from '../../header/menu'
 
 export default function Root() {
@@ -6,7 +6,7 @@ export default function Root() {
         <>
           <Menu />
           <h1>C'est la liste</h1>
-          <a href="/liste/animals/1">Numéro 1</a>
+          <Link to={"/liste/animals/1"}>Numéro 1</Link>
           <div id="detail">
             <Outlet />
           </div>
