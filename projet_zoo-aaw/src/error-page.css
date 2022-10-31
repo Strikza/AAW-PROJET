@@ -1,10 +1,15 @@
-
-
 #cringe{
     height: 500px;
     width: 500px;
 }
 
-#cringe-div{
+body {
+    background-color: #ff0000;
+    color: #00ff00;
     text-align: center;
+    font-size: 3em;
+}
+
+img {
+    box-shadow: 10px 5px 5px #0000ff;
 }
