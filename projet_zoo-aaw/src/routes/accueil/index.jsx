@@ -1,11 +1,11 @@
+import { Outlet, Link } from "react-router-dom";
 import Menu from '../../header/menu'
 
 export default function Root() {
     return (
         <>
           <Menu />
-          <a href="/erreur">test vers la page d'erreur</a>
+          <Link to={"/erreur"}>test vers la page d'erreur</Link>
         </>
     );
   }
-  
