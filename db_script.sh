@@ -10,4 +10,9 @@ echo Montage de la base
 service mysql start
 mysql -h ${HOST} --user="${USER}" --password="${PASSWORD}" < "initialize_db.sql"
 
-echo La base est operationnelle
+if [[ $? -eq 0 ]]
+then
+  echo La base est operationnelle
+else
+  echo Echec du montage de la base
+fi
