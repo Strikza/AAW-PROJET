@@ -4,7 +4,6 @@ import Menu from '../../header/menu'
 export default function Root() {
     return (
         <>
-          <Menu />
           <h1>C'est la page de connexion</h1>
           <form>
             <input id="pseudonyme" type={"text"} placeholder="pseudonyme"></input>
