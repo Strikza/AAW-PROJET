@@ -1,35 +1,22 @@
 #cringe{
-    height: 1000px;
-    width: 1000px;
-    animation-duration: .15s;
-    animation-name: clignoter;
-    animation-iteration-count: infinite;
-    transition: none;
+    height: 200px;
+    width: 200px;
+
 }
 
-@keyframes clignoter {
-     0%   { opacity:1; background-color: #ff0000;}
-     40%   {opacity:0; background-color: #00ff00}
-     100% { opacity:1; background-color: #0000ff}
- }
-
-@keyframes clignoter2 {
-    33%   { background-color: #ff0000;}
-    66%   { background-color: #00ff00;}
-    100% { background-color: #0000ff; }
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    } to {
+        transform: rotate(359deg);
+    }
 }
 
 #error-page {
-    background-color: #ff0000;
+    background-color: #9de567;
+    height: 100%;
     color: #00ff00;
     text-align: center;
     font-size: 3em;
-    animation-duration: .1s;
-    animation-name: clignoter2;
-    animation-iteration-count: infinite;
     transition: none;
-}
-
-img {
-    box-shadow: 10px 5px 5px #0000ff;
 }
