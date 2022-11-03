@@ -1,6 +1,6 @@
 const express = require("express")
 const app = express()
-const port = 5173
+const port = 3000
 // const pg = require('pg');
 // const dotenv = require("dotenv");
 //

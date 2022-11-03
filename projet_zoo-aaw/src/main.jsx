@@ -7,14 +7,14 @@ import {
 } from "react-router-dom";
 import './index.css'
 
-// Main pages
+// Main page
 import Index from "./routes/accueil";
+
+// Children pages
 import Liste from "./routes/liste";
 import Plan from "./routes/plan";
 import Connexion from "./routes/connexion";
 import Inscription from "./routes/inscription";
-
-// Children pages
 import Animal from "./routes/animal/animal";
 
 // Error page
