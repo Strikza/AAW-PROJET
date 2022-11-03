@@ -1,36 +1,45 @@
-require('dotenv').config()
-const express = require(express)
-const { useReducer } = require('react')
-const mysql = require('mysql')
-
+const express = require("express")
 const app = express()
-const port = process.env.PORT
+const port = 5173
+// const pg = require('pg');
+// const dotenv = require("dotenv");
+//
+// dotenv.config();
+// console.log("connecting to", process.env.POSTGRESQL_ADDON_URI);
+// const pgClient = new pg.Client(process.env.POSTGRESQL_ADDON_URI);
+// pgClient.connect();  
+
+// const animals = async () => {
+//     try{
+//         const res = await pgClient.query({
+//             name: "read-animals",
+//             text: 'select * from Animal;',
+//         });
+//         return res.rows;
+//     } catch(err) {
+//         // traitement des erreurs ici
+//     }
+// }
+
 const animals = [{id:1, name:'potit_robot'}, {id:2, name:'potit_deamon'}]
-const zoo_db = mysql.createPool({
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE
-})
 
 app.use("/", express.static("public"))
 app.use(express.json())
 
-app.get("/message", (req, res)=>{
+
+// app.get('/', (req, res) => {
+//     animals()
+//     .then(response => {
+//       res.status(200).send(response);
+//     })
+//     .catch(error => {
+//       res.status(500).send(error);
+//     })
+// })
+
+app.get("/api/animals", (req, res, next)=>{
     console.log("[LOG] : Page des animaux")
-    res.send("mes animaux")
+    res.send(animals)
 });
 
-app.get("/", (req, res)=>{
-    console.log("[LOG] : Page des animaux")
-    const insert = "INSERT INTO Test (name) VALUES ('Second Name');"
-    zoo_db.query(insert)
-});
-
-app.listen(5173, () => {
-    const insert = "SELECT * FROM Test;"
-    zoo_db.query(insert, (err, result) => {
-        console.log(result)
-    })
-    console.log("tag")
-})
+app.listen(port)
