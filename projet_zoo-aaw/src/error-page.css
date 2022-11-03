@@ -8,16 +8,26 @@
 }
 
 @keyframes clignoter {
-     0%   { opacity:1; }
-     40%   {opacity:0; }
-     100% { opacity:1; }
+     0%   { opacity:1; background-color: #ff0000;}
+     40%   {opacity:0; background-color: #00ff00}
+     100% { opacity:1; background-color: #0000ff}
  }
+
+@keyframes clignoter2 {
+    33%   { background-color: #ff0000;}
+    66%   { background-color: #00ff00;}
+    100% { background-color: #0000ff; }
+}
 
 #error-page {
     background-color: #ff0000;
     color: #00ff00;
     text-align: center;
     font-size: 3em;
+    animation-duration: .1s;
+    animation-name: clignoter2;
+    animation-iteration-count: infinite;
+    transition: none;
 }
 
 img {
