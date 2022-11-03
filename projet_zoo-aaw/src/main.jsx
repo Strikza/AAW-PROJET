@@ -55,8 +55,69 @@ const router = createBrowserRouter([
   },
 ]);
 
+let Comp = ()=>{
+  return <div>Salut mon giga BG</div>;
+ }
+
+ class CompClass extends React.Component{
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      animals: []
+  }
+  }
+
+  render(){
+    return(
+      <div>
+        <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>NAME</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        this.state.animals.map(({id, name}) =>{
+                                return(
+                                        <tr>
+                                            <td>{id}</td> 
+                                            <td>{name}</td>
+                                        </tr> 
+                               )      
+                        })
+                        // this.state.events.map(({id, name}) =>
+                        //     <tr>
+                        //         <td>{id}</td> 
+                        //         <td>{name}</td>
+                        //     </tr>                
+                        // )
+                    }
+                    </tbody>
+                </table>
+      </div>
+    )
+  }
+
+  componentDidMount() {
+    // Appel vers notre serveur
+    fetch('/api/animals')
+        .then((res) => res.json()) // pas besoins de 'return' car il n'y qu'une seule instruction
+        .then((animalsReponse) => {
+            // on met à jour l'état de notre composant
+            // ce qui forcera son rendu, donc l'appel à la méthode render
+            this.setState({animals: animalsReponse})
+        })
+  }
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  <>
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+    <CompClass/>
+  </>
 )
