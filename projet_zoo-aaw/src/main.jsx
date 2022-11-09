@@ -19,7 +19,7 @@ import Plan from "./routes/plan";
 import Connexion from "./routes/connexion";
 import Inscription from "./routes/inscription";
 import Animal, {
-  loader as contactLoader,
+  loader as animalLoader,
 } from "./routes/animal/animal";
 
 // Error page
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
           {
             path: "animals/:animalId",
             element: <Animal />,
-            loader: contactLoader,
+            loader: animalLoader,
             errorElement: <ErrorPage />,
           },
         ],

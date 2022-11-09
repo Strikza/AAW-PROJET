@@ -5,7 +5,12 @@ import {
    Form,
 } from 'react-router-dom';
 
-import { getAnimals, createAnimal } from "../../serveur.js";
+//import { getAnimals, createAnimal } from "../../serveur.js";
+
+export async function getAnimals(query) {
+  const res = await fetch("/api/animals/test")
+  return await res.json();
+}
 
 export async function loader() {
   const animals = await getAnimals();
@@ -13,7 +18,7 @@ export async function loader() {
 }
 
 export async function action() {
-  await createAnimal();
+  //await createAnimal();
 }
 
 export default function Root() {
@@ -23,7 +28,7 @@ export default function Root() {
           <Form method="post">
             <button type="submit">Ajoute mwa :3</button>
           </Form>
-          
+
           <div id="detail">
             <Outlet />
           </div>

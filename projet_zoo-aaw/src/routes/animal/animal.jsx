@@ -1,8 +1,8 @@
 import { Form, useLoaderData } from "react-router-dom";
-import { getAnimal } from "../../serveur";
+//import { getAnimal } from "../../serveur";
 
 export async function loader({ params }) {
-  return getAnimal(params.animalId);
+  //return getAnimal(params.animalId);
 }
 
 export default function Animal() {
