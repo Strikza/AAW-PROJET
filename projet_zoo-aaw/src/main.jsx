@@ -11,11 +11,16 @@ import './index.css'
 import Index from "./routes/accueil";
 
 // Children pages
-import Liste from "./routes/liste";
+import Liste, { 
+  loader as rootLoader,
+  action as rootAction
+} from "./routes/liste";
 import Plan from "./routes/plan";
 import Connexion from "./routes/connexion";
 import Inscription from "./routes/inscription";
-import Animal from "./routes/animal/animal";
+import Animal, {
+  loader as contactLoader,
+} from "./routes/animal/animal";
 
 // Error page
 import ErrorPage from "./error-page";
@@ -29,11 +34,14 @@ const router = createBrowserRouter([
       {
         path: "liste",
         element: <Liste />,
+        loader: rootLoader,
+        action: rootAction,
         errorElement: <ErrorPage />,
         children: [
           {
             path: "animals/:animalId",
             element: <Animal />,
+            loader: contactLoader,
             errorElement: <ErrorPage />,
           },
         ],

@@ -1,48 +1,32 @@
-import { Form } from "react-router-dom";
+import { Form, useLoaderData } from "react-router-dom";
+import { getAnimal } from "../../serveur";
 
-export default function Contact() {
-  const contact = {
-    first: "Your",
-    last: "Name",
-    avatar: "https://placekitten.com/g/200/200",
-    twitter: "your_handle",
-    notes: "Some notes",
-    favorite: true,
-  };
+export async function loader({ params }) {
+  return getAnimal(params.animalId);
+}
+
+export default function Animal() {
+  // const animal = {
+  //   id: 1,
+  //   name: "Bourletos",
+  //   favorite: true,
+  // };
+
+  const animal = useLoaderData();
 
   return (
-    <div id="contact">
-      <div>
-        <img
-          key={contact.avatar}
-          src={"contact.avatar" || null}
-        />
-      </div>
-
+    <div id="animal">
       <div>
         <h1>
-          {contact.first || contact.last ? (
+          {animal.name ? (
             <>
-              {contact.first} {contact.last}
+              {animal.name}
             </>
           ) : (
             <i>No Name</i>
           )}{" "}
-          <Favorite contact={contact} />
+          <Favorite animal={animal} />
         </h1>
-
-        {contact.twitter && (
-          <p>
-            <a
-              target="_blank"
-              href={`https://twitter.com/${contact.twitter}`}
-            >
-              {contact.twitter}
-            </a>
-          </p>
-        )}
-
-        {contact.notes && <p>{contact.notes}</p>}
 
         <div>
           <Form action="edit">
@@ -69,9 +53,9 @@ export default function Contact() {
   );
 }
 
-function Favorite({ contact }) {
+function Favorite({ animal }) {
   // yes, this is a `let` for later
-  let favorite = contact.favorite;
+  let favorite = animal.favorite;
   return (
     <Form method="post">
       <button
