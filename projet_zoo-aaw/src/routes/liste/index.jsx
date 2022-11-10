@@ -5,12 +5,8 @@ import {
    Form,
 } from 'react-router-dom';
 
-//import { getAnimals, createAnimal } from "../../serveur.js";
+import { getAnimals/*, createAnimal */} from "../animal/animal";
 
-export async function getAnimals(query) {
-  const res = await fetch("/api/animals/test")
-  return await res.json();
-}
 
 export async function loader() {
   const animals = await getAnimals();
@@ -39,7 +35,7 @@ export default function Root() {
               <ul>
                 {animals.map((animal) => (
                   <li key={animal.id}>
-                    <Link to={"animals/${animal.id}"}>
+                    <Link to={`animals/${animal.id}`}>
                       {animal.name ? (
                       <>
                         {animal.name}

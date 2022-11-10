@@ -17,10 +17,11 @@ app.use(express.json())
 // //     }
 // // }
 
-const animals = [{id:1, name:'potit_robot'}, {id:2, name:'potit_deamon'}]
-
-// 
-
+const animals = [
+  {id:1, name:'potit_robot'}, 
+  {id:2, name:'potit_deamon'}, 
+  {id:3, name:'My Bourletos'}
+]
 
 app.get('/', (req, res) => {
     animals()
@@ -32,7 +33,7 @@ app.get('/', (req, res) => {
     })
 })
 
-app.get("/api/animals/test", (req, res, next)=>{
+app.get("/api/animals", (req, res, next)=>{
     console.log("[LOG] : Page des animaux")
     res.send(animals)
 });

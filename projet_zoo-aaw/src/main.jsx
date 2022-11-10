@@ -20,7 +20,7 @@ import Connexion from "./routes/connexion";
 import Inscription from "./routes/inscription";
 import Animal, {
   loader as animalLoader,
-} from "./routes/animal/animal";
+} from "./routes/animal/animal.jsx";
 
 // Error page
 import ErrorPage from "./error-page";
@@ -78,5 +78,3 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App/>
   </>
 )
-
-// ReactDOM.render(<App/>, document.getElementById('root'))
