@@ -4,7 +4,7 @@
 
 Pour le bon fonctionnement et le lancement du projet, il est important d'avoir
 les prérequis suivants :
-- Environnement Linux
+- SGBD PostgreSQL
 - NodeJS (npm 8.19.2+ et node v18.10.0+)
 
 ---
@@ -12,22 +12,21 @@ les prérequis suivants :
 ### Etape 1 - Monter la base de données
 
 Afin d'utiliser et stocker les données du site, il va falloir monter une base de donnée.
-Pour cela, ouvrez un terminal, et placez-vous à la racine du projet.
-Puis, lancez le db_script.sh avec la commande suivante `sudo ./db_script.sh`.
+Pour cela, créer une base de donnée qui se nomme `zoo_db` dans un SGBD PostgreSQL.
 
 ---
 
-### Etape 2 - Importer les dépendances
+### Etape 2 - Initialiser les tables
 
-Afin d'importer les dépendances nécessaire au projet, placez-vous dans le répertoire
-*projet_zoo-aaw* du projet et effectuez la commande `npm install`.
+Pour créer les tables nécessaires, exécutez le script SQL `initialize_tables.sql` dans
+l'environnement de la base `zoo_db`.
 
 ---
 
-### Etape 3 - Exécution
+### Etape 3 - Initialiser les données minimales
 
-Tout est fin prêt à être exécuté, vous n'avez plus qu'à faire un `npm run dev` pour
-lancer le site.
+Enfin, pour avoir un jeu de données suffisants, exécutez dans ce même environnement de
+base le script SQL `initialize_datas.sql`.
 
 
 
