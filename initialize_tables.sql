@@ -19,6 +19,7 @@ CREATE TABLE public."USERS"
     "ID" uuid NOT NULL,
     "NAME" character varying NOT NULL,
     "PASSWORD" character varying NOT NULL,
+    "PERMISSION" character varying NOT NULL,
     PRIMARY KEY ("ID")
 );
 
