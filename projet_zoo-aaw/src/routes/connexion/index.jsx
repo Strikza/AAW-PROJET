@@ -1,15 +1,24 @@
 import { Outlet, Link } from 'react-router-dom';
 
+import './index.css'
+
 export default function Root() {
     return (
-        <>
-          <h1>C'est la page de connexion</h1>
-          <form>
-            <input id="pseudonyme" type={"text"} placeholder="pseudonyme"></input>
-            <input id="password" type={"password"} placeholder="password"></input>
-            <button>se connecter</button>
-          </form>
-          <Link to={"/inscription"}>Pas inscrit ? Cliquez ici</Link>
-        </>
+        <div id="page">
+            <form>
+                <h1>Connexion</h1>
+                <hr/>
+                <p className="label">Nom d'utilisateur</p>
+                <div>
+                    <input className="text-in" id="pseudonyme" type={"text"}></input>
+                </div>
+                <p className="label">Mot de passe</p>
+                <div>
+                    <input className="text-in" id="password" type={"password"}></input>
+                </div>
+                <input className="submit-in" type="submit" value="Se connecter"></input>
+                <Link to={"/inscription"}>Pas inscrit ? Cliquez ici</Link>
+            </form>
+        </div>
     );
   }

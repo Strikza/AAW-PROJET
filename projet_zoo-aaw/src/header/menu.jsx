@@ -7,13 +7,13 @@ export default function Menu() {
             <Link to={"/"}><img src="../../annexe/Accueil/lien_accueil.png" id="menu_img"></img></Link>
             <nav>
                 <ul id="menu">
-                    <li class="menu_item">
+                    <li className="menu_item">
                         <Link to={"/liste"}>Liste des animaux</Link>
                     </li>
-                    <li class="menu_item">
+                    <li className="menu_item">
                         <Link to={"/plan"}>Plan</Link>
                     </li>
-                    <li class="menu_item" id="connexion">
+                    <li className="menu_item" id="connexion">
                         <Link to={"/connexion"}>Connexion/Inscription</Link>
                     </li>
                 </ul>
