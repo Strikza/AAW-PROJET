@@ -1,20 +1,6 @@
 import { Form, useLoaderData } from "react-router-dom";
-import { getAnimals } from "./animal";
+import { getAnimal } from "./animal";
 
-
-function getAnimal(id) {
-  const animals = getAnimals()
-  let res
-  if (animals.length === 0){
-    res = {id:0, name: "No name broooo"}
-  }
-  // animals.map((animal) =>{
-  //   if(animal.id === id){
-  //     res = animal
-  //   }}
-  // )
-  return res
-}
 
 export async function loader({ params }) {
   return getAnimal(params.animalId);
@@ -23,21 +9,16 @@ export async function loader({ params }) {
 
 
 export default function Animal() {
-  // const animal = {
-  //   id: 1,
-  //   name: "Bourletos",
-  //   favorite: true,
-  // };
-
   const animal = useLoaderData();
+  console.log(animal);
 
   return (
     <div id="animal">
       <div>
         <h1>
-          {animal.name ? (
+          {animal["NAME"] ? (
             <>
-              {animal.name}
+              {animal["NAME"]}
             </>
           ) : (
             <i>No Name</i>

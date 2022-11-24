@@ -4,18 +4,16 @@ const port = 3000;
 app.use("/", express.static("public"))
 app.use(express.json())
 
+const {Pool, Client} = require('pg')
 
-// // const animals = async () => {
-// //     try{
-// //         const res = await pgClient.query({
-// //             name: "read-animals",
-// //             text: 'select * from Animal;',
-// //         });
-// //         return res.rows;
-// //     } catch(err) {
-// //         // traitement des erreurs ici
-// //     }
-// // }
+const pool = new Pool({
+  user: 'superuser',
+  host: 'localhost',
+  database: 'zoo_db',
+  password: 'root',
+  port: 5432,
+})
+
 
 const animals = [
   {id:1, name:'potit_robot'}, 
@@ -35,7 +33,16 @@ app.get('/', (req, res) => {
 
 app.get("/api/animals", (req, res, next)=>{
     console.log("[LOG] : Page des animaux")
-    res.send(animals)
+
+    const query = {
+      name: 'fetch-animals',
+      text: 'SELECT * FROM public."ANIMALS"',
+    }
+    
+    pool.query(query, (err, result) => {
+      res.send(result.rows)
+      pool.end()
+    })
 });
 
 app.listen(port)

@@ -34,11 +34,11 @@ export default function Root() {
             {animals.length ? (
               <ul>
                 {animals.map((animal) => (
-                  <li key={animal.id}>
-                    <Link to={`animals/${animal.id}`}>
-                      {animal.name ? (
+                  <li key={animal["ID"]}>
+                    <Link to={`animals/${animal["ID"]}`}>
+                      {animal["NAME"] ? (
                       <>
-                        {animal.name}
+                        {animal["NAME"]}
                       </>
                       ) : (
                         <i>No Name</i>

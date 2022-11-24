@@ -7,11 +7,18 @@ export async function getAnimals() {
 export async function getAnimal(id) {
     const animalsJson = await fetch("/api/animals")
     const animals = animalsJson.json()
-    let res = {id:0, name: "No name broooo"}
-    // for( let i = 0; i < animals.length; ++i){
-    //     if(animals[i].id === id){
-    //         res = animals[i]
-    //     }
-    // }
+    const query = {
+        name: 'fetch-animals',
+        text: 'SELECT * FROM public."ANIMALS" where "ID" = $1',
+        values: [id],
+      }
+      
+    let res
+    
+      pool.query(query, (err, result) => {
+        res = result.rows
+        pool.end()
+    })
+
     return res
 }
