@@ -19,9 +19,9 @@ export default function Root() {
                     </div>
                     <div className="column">
                         <p className="label">E-mail</p>
-                        <input className="text" id="pseudonyme" type={"email"}></input>
+                        <input className="text" id="email" type={"email"}></input>
                         <p className="label">Vérification</p>
-                        <input className="text" id="password" type={"password"}></input>
+                        <input className="text" id="checking" type={"password"}></input>
                     </div>
                 </div>
                 <input className="button" type="submit" value="S'inscrire"></input>
