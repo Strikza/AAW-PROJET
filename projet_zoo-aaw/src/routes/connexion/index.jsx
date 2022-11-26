@@ -1,4 +1,4 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import './index.css'
 
@@ -16,8 +16,11 @@ export default function Root() {
                 <div>
                     <input className="text-in" id="password" type={"password"}></input>
                 </div>
-                <input className="submit-in" type="submit" value="Se connecter"></input>
-                <Link to={"/inscription"}>Pas inscrit ? Cliquez ici</Link>
+                <input className="button-form" type="submit" value="Se connecter"></input>
+                <hr/>
+                <Link to={"/inscription"}>
+                    <button className="button-form">S'inscrire</button>
+                </Link>
             </form>
         </div>
     );
