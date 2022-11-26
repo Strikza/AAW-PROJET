@@ -3,9 +3,7 @@ import ReactDOM from 'react-dom/client'
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
 } from "react-router-dom";
-import './index.css'
 
 // Main page
 import Index from "./routes/accueil";

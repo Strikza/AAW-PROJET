@@ -1,18 +1,17 @@
 import { 
-  Outlet, 
-  Link
+  Outlet
  } from "react-router-dom";
 
 import Menu from "../../header/menu";
+import "../../css/main.css"
 
 export default function Root() {
     return (
-        <>
-          <Menu />
-          <div id="Children">
-            <Outlet />
-          </div>
-          <Link to={"/erreur"}>test vers la page d'erreur</Link>
-        </>
+        <div>
+            <Menu/>
+            <div className="page" id="Children">
+                <Outlet/>
+            </div>
+        </div>
     );
   }
