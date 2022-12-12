@@ -6,6 +6,10 @@ import "../../css/main.css"
 export default function Root() {
     return (
         <div>
+            <Menu/>
+            <div className="page" id="children">
+                <Outlet/>
+            </div>
         </div>
     );
-  }
+}

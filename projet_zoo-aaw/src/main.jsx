@@ -3,14 +3,13 @@ import ReactDOM from 'react-dom/client'
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
 } from "react-router-dom";
-import './index.css'
 
 // Main page
-import Index from "./routes/accueil";
+import RootPage from "./routes/body";
 
 // Children pages
+import Accueil from "./routes/accueil";
 import Liste, { 
   loader as rootLoader,
   action as rootAction
@@ -28,41 +27,46 @@ import ErrorPage from "./error-page";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Index />,
-    errorElement: <ErrorPage />,
+    element: <RootPage/>,
+    errorElement: <ErrorPage/>,
     children: [
+      {
+        path: "accueil",
+        element: <Accueil/>,
+        errorElement: <ErrorPage/>,
+      },
       {
         path: "liste",
         element: <Liste />,
         loader: rootLoader,
         action: rootAction,
-        errorElement: <ErrorPage />,
+        errorElement: <ErrorPage/>,
         children: [
           {
             path: "animals/:animalId",
-            element: <Animal />,
+            element: <Animal/>,
             loader: animalLoader,
-            errorElement: <ErrorPage />,
+            errorElement: <ErrorPage/>,
           },
         ],
       },
       {
         path: "plan",
-        element: <Plan />,
-        errorElement: <ErrorPage />,
+        element: <Plan/>,
+        errorElement: <ErrorPage/>,
       },
       {
         path: "connexion",
-        element: <Connexion />,
-        errorElement: <ErrorPage />,
+        element: <Connexion/>,
+        errorElement: <ErrorPage/>,
       },
       {
         path: "inscription",
-        element: <Inscription />,
-        errorElement: <ErrorPage />,
-      },
-    ],
-  },
+        element: <Inscription/>,
+        errorElement: <ErrorPage/>,
+      }
+    ]
+  }
 ]);
 
 let App = ()=>{
@@ -74,7 +78,5 @@ let App = ()=>{
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <>
     <App/>
-  </>
 )

@@ -1,15 +1,25 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import '../../css/form.css'
 
 export default function Root() {
     return (
-        <>
-          <h1>C'est la page de connexion</h1>
-          <form>
-            <input id="pseudonyme" type={"text"} placeholder="pseudonyme"></input>
-            <input id="password" type={"password"} placeholder="password"></input>
-            <button>se connecter</button>
-          </form>
-          <Link to={"/inscription"}>Pas inscrit ? Cliquez ici</Link>
-        </>
+        <div>
+            <form className="login">
+                <h1>Connexion</h1>
+                <hr/>
+                <div className="column">
+                    <p className="label">Nom d'utilisateur</p>
+                    <input className="text" id="pseudonyme" type={"text"}></input>
+                    <p className="label">Mot de passe</p>
+                    <input className="text" id="password" type={"password"}></input>
+                </div>
+                <input className="button" type="submit" value="Se connecter"></input>
+                <hr/>
+                <Link to={"/inscription"}>
+                    <button className="button">S'inscrire</button>
+                </Link>
+            </form>
+        </div>
     );
   }
