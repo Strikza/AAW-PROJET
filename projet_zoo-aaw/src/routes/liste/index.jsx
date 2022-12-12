@@ -21,10 +21,6 @@ export default function Root() {
     const { animals } = useLoaderData();
     return (
         <>
-          <Form method="post">
-            <button type="submit">Ajoute mwa :3</button>
-          </Form>
-
           <div id="detail">
             <Outlet />
           </div>

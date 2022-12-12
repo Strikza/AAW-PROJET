@@ -9,49 +9,36 @@ export async function loader({ params }) {
 
 export default function Animal() {
   const { animal } = useLoaderData();
-  console.log(animal);
-  const url = "../../" + animal["0"]["URL"]
-  console.log(url);
 
   return (
     <div id="animal">
       <div>
-        {animal.length ? (
-          <div>
-            {animal.map((a) => ( 
-              <div>
-                {a["URL"] ? (
-                  <img src = {url}/>
-                ) : (
-                  <i>No Image</i>
-                )}{" "}
-                <h1>
-                  {a["NAME"] ? (
-                    <>
-                      {a["NAME"]}
-                    </>
-                  ) : (
-                    <i>No Name</i>
-                  )}{" "}
-                </h1>
-                <p>
-                  {a["DESC"] ? (
-                    <>
-                      {a["DESC"]}
-                    </>
-                  ) : (
-                    <i>No Description</i>
-                  )}{" "}
-                  <Favorite animal={animal} />
-                </p>
-              </div>
-            ))}
-          </div>
+        <div>
+          {animal["0"]["URL"] ? (
+            <img src = {"../../" + animal["0"]["URL"]}/>
           ) : (
-            <p>
-              <b><i>Déso bro, pas d'animal :3</i></b>
-            </p>
-        )}
+            <i>No Image</i>
+          )}{" "}
+          <h1>
+            {animal["0"]["NAME"] ? (
+              <>
+                {animal["0"]["NAME"]}
+              </>
+            ) : (
+              <i>No Name</i>
+            )}{" "}
+          </h1>
+          <p>
+            {animal["0"]["DESC"] ? (
+              <>
+                {animal["0"]["DESC"]}
+              </>
+            ) : (
+              <i>No Description</i>
+            )}{" "}
+            <Favorite animal={animal["0"]} />
+          </p>
+        </div>
         <div>
           <Form action="edit">
             <button type="submit">Edit</button>
