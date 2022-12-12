@@ -21,6 +21,11 @@ const animals = [
   {id:3, name:'My Bourletos'}
 ]
 
+const queryFetchAll = {
+  name: 'fetch-animals',
+  text: 'SELECT * FROM public."ANIMALS"',
+}
+
 app.get('/', (req, res) => {
     animals()
     .then(response => {
@@ -33,16 +38,24 @@ app.get('/', (req, res) => {
 
 app.get("/api/animals", (req, res, next)=>{
     console.log("[LOG] : Page des animaux")
-
-    const query = {
-      name: 'fetch-animals',
-      text: 'SELECT * FROM public."ANIMALS"',
-    }
     
-    pool.query(query, (err, result) => {
+    pool.query(queryFetchAll, (err, result) => {
       res.send(result.rows)
-      pool.end()
     })
+});
+
+app.get("/api/animals/:id", (req, res, next)=>{
+  console.log("[LOG] : Page de l'animal " + req.params.id)
+
+  const queryFetchOne = {
+    name: 'fetch-animal',
+    text: 'SELECT * FROM public."ANIMALS" where "ID" = $1',
+    values: [req.params.id],
+  }
+  
+  pool.query(queryFetchOne, (err, result) => {
+    res.send(result.rows)
+  })
 });
 
 app.listen(port)

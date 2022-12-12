@@ -13,9 +13,7 @@
 }
 
 #error-page {
-    background-color: #9de567;
     height: 100%;
-    color: #00ff00;
     text-align: center;
     font-size: 3em;
     transition: none;

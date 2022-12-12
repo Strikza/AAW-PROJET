@@ -3,29 +3,55 @@ import { getAnimal } from "./animal";
 
 
 export async function loader({ params }) {
-  return getAnimal(params.animalId);
+  const animal = await getAnimal(params.animalId);
+  return { animal }
 }
 
-
-
 export default function Animal() {
-  const animal = useLoaderData();
+  const { animal } = useLoaderData();
   console.log(animal);
+  const url = "../../" + animal["0"]["URL"]
+  console.log(url);
 
   return (
     <div id="animal">
       <div>
-        <h1>
-          {animal["NAME"] ? (
-            <>
-              {animal["NAME"]}
-            </>
+        {animal.length ? (
+          <div>
+            {animal.map((a) => ( 
+              <div>
+                {a["URL"] ? (
+                  <img src = {url}/>
+                ) : (
+                  <i>No Image</i>
+                )}{" "}
+                <h1>
+                  {a["NAME"] ? (
+                    <>
+                      {a["NAME"]}
+                    </>
+                  ) : (
+                    <i>No Name</i>
+                  )}{" "}
+                </h1>
+                <p>
+                  {a["DESC"] ? (
+                    <>
+                      {a["DESC"]}
+                    </>
+                  ) : (
+                    <i>No Description</i>
+                  )}{" "}
+                  <Favorite animal={animal} />
+                </p>
+              </div>
+            ))}
+          </div>
           ) : (
-            <i>No Name</i>
-          )}{" "}
-          <Favorite animal={animal} />
-        </h1>
-
+            <p>
+              <b><i>Déso bro, pas d'animal :3</i></b>
+            </p>
+        )}
         <div>
           <Form action="edit">
             <button type="submit">Edit</button>
