@@ -40,7 +40,6 @@ app.get("/api/animals", (req, res, next)=>{
     console.log("[LOG] : Page des animaux")
     
     pool.query(queryFetchAll, (err, result) => {
-      console.log(err) 
       res.send(result.rows)
     })
 });
