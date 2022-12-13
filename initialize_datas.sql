@@ -4,7 +4,9 @@ DELETE FROM  public."ANIMALS";
 
 INSERT INTO public."USERS"(
     "ID", "NAME", "PASSWORD", "PERMISSION")
-VALUES ('c2e85e90-6101-11ed-9b6a-0242ac120002', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin');
+VALUES 
+    ('c2e85e90-6101-11ed-9b6a-0242ac120001', 'admin', 'admin', 'admin'),
+    ('c2e85e90-6101-11ed-9b6a-0242ac120002', 'user', 'user', 'user');
 
 INSERT INTO public."ANIMALS"(
     "ID", "NAME", "DESC", "URL")
