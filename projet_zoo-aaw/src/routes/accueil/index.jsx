@@ -6,6 +6,7 @@ import "../../css/main.css"
 export default function Root() {
     return (
         <div>
+            <p>Bonjour, bienvenue sur le site du zoo Minecraft, bonne visite !</p>
         </div>
     );
   }
