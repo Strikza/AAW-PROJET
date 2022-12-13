@@ -7,10 +7,10 @@ app.use(express.json())
 const {Pool, Client} = require('pg')
 
 const pool = new Pool({
-  user: 'superuser',
+  user: 'postgres',
   host: 'localhost',
   database: 'zoo_db',
-  password: 'root',
+  password: 'PgAdminsam0627',
   port: 5432,
 })
 
@@ -40,6 +40,7 @@ app.get("/api/animals", (req, res, next)=>{
     console.log("[LOG] : Page des animaux")
     
     pool.query(queryFetchAll, (err, result) => {
+      console.log(err) 
       res.send(result.rows)
     })
 });

@@ -1,0 +1,10 @@
+Loggin Sam :
+
+const pool = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'zoo_db',
+  password: 'PgAdminsam0627',
+  port: 5432,
+})
+
