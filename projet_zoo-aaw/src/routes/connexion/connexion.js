@@ -2,13 +2,12 @@ import { redirect } from "react-router-dom";
 
 export async function tryConnect({request, param}) {
     console.log("try to connect ma boy")
-    const navigate = useNavigate
 
     const formData = await request.formData();
     const updates = Object.fromEntries(formData);
 
     try {
-        await fetch("api/connexion", {
+        await fetch("api/connect", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -21,11 +20,14 @@ export async function tryConnect({request, param}) {
                 console.log("new error")
                 throw new Error("Probleme de connexion !");
             }
+            else{
+                console.log("Connection completed")
+            }
         })
         return redirect('/accueil')
     } catch(err) {
-        console.log("get catched bitch")
-        return redirect('/accueil')
+        console.log("get caught bitch")
+        return redirect('/error')
     }
     
 }
