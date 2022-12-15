@@ -7,10 +7,10 @@ app.use(express.json())
 const {Pool, Client} = require('pg')
 
 const pool = new Pool({
-  user: 'postgres',
+  user: 'superuser',
   host: 'localhost',
   database: 'zoo_db',
-  password: 'PgAdminsam0627',
+  password: 'root',
   port: 5432,
 })
 

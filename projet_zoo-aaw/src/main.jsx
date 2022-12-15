@@ -14,7 +14,9 @@ import Liste, {
   loader as rootLoader,
   action as rootAction
 } from "./routes/liste";
-import Plan from "./routes/plan";
+import Plan, {
+  loader as planLoader
+} from "./routes/plan";
 import Connexion, {
   action as connAction
 } from "./routes/connexion";
@@ -55,6 +57,7 @@ const router = createBrowserRouter([
       {
         path: "plan",
         element: <Plan/>,
+        loader: planLoader,
         errorElement: <ErrorPage/>,
       },
       {

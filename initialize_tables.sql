@@ -8,6 +8,8 @@ CREATE TABLE public."ANIMALS"
     "NAME" character varying NOT NULL,
     "DESC" character varying NOT NULL,
     "URL" character varying NOT NULL,
+    "X" character varying NULL,
+    "Y" character varying NULL,
     PRIMARY KEY ("ID")
 );
 
