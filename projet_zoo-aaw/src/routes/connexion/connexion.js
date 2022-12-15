@@ -4,6 +4,7 @@ export async function tryConnect({request, param}) {
     console.log("try to connect ma boy")
 
     const formData = await request.formData();
+    console.log(request)
     const updates = Object.fromEntries(formData);
 
     try {
