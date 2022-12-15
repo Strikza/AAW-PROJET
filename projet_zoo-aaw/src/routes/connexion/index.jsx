@@ -44,7 +44,7 @@ export default function Root() {
                 </InputGroup>
                 <hr/>
                 <Link to={"/inscription"}>
-                    <button className="button">S'inscrire</button>
+                    <button className="button" onClick={login}>S'inscrire</button>
                 </Link>
             </Form>
         </div>
