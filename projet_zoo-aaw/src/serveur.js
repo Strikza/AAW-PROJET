@@ -7,10 +7,10 @@ app.use(express.json())
 const {Pool, Client} = require('pg')
 
 const pool = new Pool({
-  user: 'superuser',
+  user: 'postgres',
   host: 'localhost',
   database: 'zoo_db',
-  password: 'root',
+  password: 'PgAdminsam0627',
   port: 5432,
 })
 
@@ -20,6 +20,11 @@ const animals = [
   {id:2, name:'potit_deamon'}, 
   {id:3, name:'My Bourletos'}
 ]
+
+const user = {
+  pseudo : "user",
+  pwd : "1234"
+}
 
 const queryFetchAll = {
   name: 'fetch-animals',
@@ -56,6 +61,15 @@ app.get("/api/animals/:id", (req, res, next)=>{
   pool.query(queryFetchOne, (err, result) => {
     res.send(result.rows)
   })
+});
+
+app.post("/api/connexion", (req, res, next)=>{
+  console.log("[LOG] : Page des utilisateurs")
+  
+  res.sendStatus(220)
+  //pool.query(queryFetchAll, (err, result) => {
+  //  res.send(result.rows)
+  //})
 });
 
 app.listen(port)
