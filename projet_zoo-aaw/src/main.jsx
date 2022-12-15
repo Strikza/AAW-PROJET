@@ -14,17 +14,12 @@ import Liste, {
   loader as rootLoader,
   action as rootAction
 } from "./routes/liste";
-<<<<<<< HEAD
 import Plan, {
   loader as planLoader
 } from "./routes/plan";
-import Connexion from "./routes/connexion";
-=======
-import Plan from "./routes/plan";
 import Connexion, {
   action as connAction
 } from "./routes/connexion";
->>>>>>> 03b078c57760a7229ac833529e0c170aa8efca1d
 import Inscription from "./routes/inscription";
 import Animal, {
   loader as animalLoader,
