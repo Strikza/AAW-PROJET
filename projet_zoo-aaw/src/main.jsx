@@ -17,9 +17,7 @@ import Liste, {
 import Plan, {
   loader as planLoader
 } from "./routes/plan";
-import Connexion, {
-  action as connAction
-} from "./routes/connexion";
+import Connexion from "./routes/connexion";
 import Inscription from "./routes/inscription";
 import Animal, {
   loader as animalLoader,
@@ -63,7 +61,6 @@ const router = createBrowserRouter([
       {
         path: "connexion",
         element: <Connexion/>,
-        action: connAction,
         errorElement: <ErrorPage/>,
       },
       {
