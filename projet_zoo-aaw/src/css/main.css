@@ -4,16 +4,11 @@
 }
 
 html, body {
-    height: 100%;
+    background-color: #e1e1e1;
     padding: 0;
     margin: 0;
 
     font-family: Minecraftia, serif;
-}
-
-#root {
-    height: 100%;
-    background-color: #e1e1e1;
 }
 
 .page {
