@@ -67,19 +67,24 @@ app.post("/api/connect", (req, res, next)=>{
   console.log("[LOG] : Page des utilisateurs")
 
   const user = req.body
-
   console.log(user)
 
-  if(user.user == users.pseudo && user.password == users.pwd){
-    res.sendStatus(200)
+  const queryFetchOne = {
+    name: 'fetch-user',
+    text: 'SELECT * FROM public."USERS" where "NAME" = $1 and "PASSWORD" = $2',
+    values: [user.name, user.password]  
   }
-  else{
-    res.sendStatus(404)
-  }
-  
-  //pool.query(queryFetchAll, (err,result) => {
-  //  res.send(result.rows)
-  //})
+
+  pool.query(queryFetchOne, (err, result) => {
+    console.log(result.rows)
+     if(result.rows.length !== 0){
+      res.sendStatus(200)
+    }
+    else{
+      res.sendStatus(404)
+    }
+  })
+
 });
 
 app.listen(port)

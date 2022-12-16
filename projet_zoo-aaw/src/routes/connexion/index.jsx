@@ -1,51 +1,68 @@
-import { Link, Form } from 'react-router-dom';
+import { Link, Form, useNavigate } from 'react-router-dom';
 import { InputGroup } from 'react-bootstrap';
 import React, { useState } from "react";
 
 import '../../css/form.css'
 
-export async function action({request, param}){
-    return tryConnect({request, param});
-}
-
 export default function Root() {
 
-    const [user, setUser] = useState("");
+    const [name, setName] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     async function loginUser(credentials) {
-        try{
-            await fetch("/api/connect", {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(credentials)
-            })
-            .then((res) => {
-                if(res.status !== 200){
-                    console.log("new error")
-                    throw new Error("Probleme de connexion !");
-                }
-                else{
-                    console.log("Connection completed")
-                }
-            })
-            .then(data => data.json())
-            return redirect('/accueil')
-        }
-        catch(err){
-            console.log("get caught bitch")
-            return redirect('/error')
-        }
+        
+        let resp;
+
+        await fetch("/api/connect", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(credentials)
+        })
+        .then((res) => {
+            resp =  res.status
+        })
+        return resp
     }
 
     const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await loginUser({
-            user,
-            password
-        });
+
+        if(name != "" && password != ""){
+            e.preventDefault();
+
+            const res = await loginUser({
+                name,
+                password
+            });
+
+            // Navigation après la communication avec le serveur
+            try{
+                if(res !== 200){
+                    console.log("new error")
+                    throw new Error("Problème de connexion !")
+                }
+                else{
+                    console.log("Connexion réussi")
+                    navigate('/accueil')
+                }
+            }
+            catch(err){
+                console.log("get caught ma boy")
+                alert("ERREUR :\n Il semblerait que l'une de vos informations de connexion soit erronée")
+                setName("")
+                setPassword("")
+                navigate('/connexion');
+            }
+        }
+        else{
+            e.preventDefault();
+            alert("ERREUR :\n Il semblerait qu'il manque l'une de vos informations de connexion")
+            navigate('/connexion');
+        }
+
+        
     }
 
     return (
@@ -60,7 +77,7 @@ export default function Root() {
                 <InputGroup>
                     <div className="column">
                         <p className="label">Nom d'utilisateur</p>
-                        <input className="text" type={"text"} value={user} onChange={(e) => setUser(e.target.value)}></input>
+                        <input className="text" type={"text"} value={name} onChange={(e) => setName(e.target.value)}></input>
                         <p className="label">Mot de passe</p>
                         <input className="text" type={"password"} value={password} onChange={(e) => setPassword(e.target.value)}></input>
                     </div>
