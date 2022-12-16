@@ -35,4 +35,4 @@ base le script SQL `initialize_datas.sql`.
 
 * [Clément BOUQUET](https://github.com/fasory)
 * [Samuel GOUBEAU](https://github.com/Strikza)
-* Maxime LE BRETON
+* [Maxime LEBRETON](https://github.com/Aelysya)
