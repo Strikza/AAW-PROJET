@@ -13,6 +13,7 @@ les prérequis suivants :
 
 Afin d'utiliser et stocker les données du site, il va falloir monter une base de donnée.
 Pour cela, créer une base de donnée qui se nomme `zoo_db` dans un SGBD PostgreSQL.
+/!\IMPORTANT/!\ Pensez bien à changer les informations de connexion dans le fichier serveur.js pour bien vous connecter à la base de données.
 
 ---
 
