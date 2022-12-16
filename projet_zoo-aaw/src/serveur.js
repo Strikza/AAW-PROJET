@@ -7,10 +7,10 @@ app.use(express.json())
 const {Pool, Client} = require('pg')
 
 const pool = new Pool({
-  user: 'superuser',
+  user: 'postgres',
   host: 'localhost',
   database: 'zoo_db',
-  password: 'root',
+  password: 'PgAdminsam0627',
   port: 5432,
 })
 
@@ -21,7 +21,7 @@ const animals = [
   {id:3, name:'My Bourletos'}
 ]
 
-const user = {
+const users = {
   pseudo : "user",
   pwd : "1234"
 }
@@ -69,8 +69,14 @@ app.post("/api/connect", (req, res, next)=>{
   const user = req.body
 
   console.log(user)
+
+  if(user.user == users.pseudo && user.password == users.pwd){
+    res.sendStatus(200)
+  }
+  else{
+    res.sendStatus(404)
+  }
   
-  res.sendStatus(200)
   //pool.query(queryFetchAll, (err,result) => {
   //  res.send(result.rows)
   //})

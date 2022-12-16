@@ -1,7 +1,6 @@
 import { Link, Form } from 'react-router-dom';
 import { InputGroup } from 'react-bootstrap';
-import { tryConnect } from './connexion';
-import { useState } from "react";
+import React, { useState } from "react";
 
 import '../../css/form.css'
 
@@ -12,17 +11,41 @@ export async function action({request, param}){
 export default function Root() {
 
     const [user, setUser] = useState("");
-
     const [password, setPassword] = useState("");
 
-    const login=()=>{
-        fetch("/api/connect", {
-            method:"POST",
-            body:{
-                user,
-                password
-            }
-        })
+    async function loginUser(credentials) {
+        try{
+            await fetch("/api/connect", {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(credentials)
+            })
+            .then((res) => {
+                if(res.status !== 200){
+                    console.log("new error")
+                    throw new Error("Probleme de connexion !");
+                }
+                else{
+                    console.log("Connection completed")
+                }
+            })
+            .then(data => data.json())
+            return redirect('/accueil')
+        }
+        catch(err){
+            console.log("get caught bitch")
+            return redirect('/error')
+        }
+    }
+
+    const handleSubmit = async e => {
+        e.preventDefault();
+        const token = await loginUser({
+            user,
+            password
+        });
     }
 
     return (
@@ -30,6 +53,7 @@ export default function Root() {
             <Form 
             className="login" 
             method='post'
+            onSubmit={handleSubmit}
               >
                 <h1>Connexion</h1>
                 <hr/>
@@ -44,7 +68,7 @@ export default function Root() {
                 </InputGroup>
                 <hr/>
                 <Link to={"/inscription"}>
-                    <button className="button" onClick={login}>S'inscrire</button>
+                    <button className="button">S'inscrire</button>
                 </Link>
             </Form>
         </div>
