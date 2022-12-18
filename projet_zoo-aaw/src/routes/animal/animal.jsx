@@ -8,6 +8,7 @@ export async function loader({ params }) {
 }
 
 export default function Animal() {
+  // Tableau d'un élément contenant un animal
   const { animal } = useLoaderData();
 
   return (
