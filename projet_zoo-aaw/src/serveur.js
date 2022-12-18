@@ -21,31 +21,36 @@ const pool = new Pool({
   port: 5432,
 })
 
+
+// Vérification de connection déjà établie
 app.use((req, res, next)=>{
   let cookie = req.cookies["TOLKIEN_CONNECTED"]
-  console.log(tokens)
   
   if(cookie){
     console.log("[LOG] : Cookie value = ", cookie)
-    console.log("[LOG] : Token trouvé")
     
     // à remplacer par une recherche en BD
     let token_f = tokens[0]
 
     if(token_f){
-      let idUser = token_f.idUser
+      console.log("[LOG] : Token trouvé")
 
       // Création de la requête
       const queryFetchOne = {
-        name: 'fetch-user',
+        name: 'fetch-user-connected',
         text: 'SELECT * FROM public."USERS" where "ID" = $1',
-        values: [idUser]  
+        values: [token_f.idUser]  
       }
 
-      // pool.query(queryFetchOne, (err, result) => {
-      //   console.log(result.rows)
-      // })
+      pool.query(queryFetchOne, (err, result) => {
+        //let user_bd = JSON.parse(JSON.stringify(result.rows[0]))
+        req.user = JSON.parse(JSON.stringify(result.rows[0]))
+      })
 
+    }
+    else{
+      // Supprime le cookie si le token n'existe pas
+      res.clearCookie("TOLKIEN_CONNECTED")
     }
 
   }
@@ -55,8 +60,12 @@ app.use((req, res, next)=>{
     tokens.pop()
   }
 
-  next();
+  // Sert à attendre que la requête sur la base de données se termine
+  setTimeout(function(){
+    next()
+  }, 10)
 })
+
 
 app.get('/', (req, res) => {
     animals()
@@ -68,9 +77,16 @@ app.get('/', (req, res) => {
     })
 })
 
+
 // Appel de tous les animaux
 app.get("/api/animals", (req, res, next)=>{
     console.log("[LOG] : Page des animaux")
+
+    let user = req.user
+
+    if(user){
+      console.log("[LOG] : User conneced : ", user)
+    }
 
     // Création de la requête
     const queryFetchAll = {
@@ -82,6 +98,7 @@ app.get("/api/animals", (req, res, next)=>{
       res.send(result.rows)
     })
 });
+
 
 // Appel d'un animal
 app.get("/api/animals/:id", (req, res, next)=>{
@@ -98,6 +115,7 @@ app.get("/api/animals/:id", (req, res, next)=>{
     res.send(result.rows)
   })
 });
+
 
 app.post("/api/connect", (req, res, next)=>{
   console.log("[LOG] : Page des utilisateurs")
@@ -120,8 +138,7 @@ app.post("/api/connect", (req, res, next)=>{
         idUser: result.rows[0]["ID"]
       })
 
-      //, {maxAge: 20000}
-      res.cookie("TOLKIEN_CONNECTED", 422022)
+      res.cookie("TOLKIEN_CONNECTED", 422022, {maxAge: 20000})
       res.sendStatus(200)
     }
     else{
@@ -130,5 +147,6 @@ app.post("/api/connect", (req, res, next)=>{
   })
 
 });
+
 
 app.listen(port)
