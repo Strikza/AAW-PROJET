@@ -72,3 +72,8 @@
 .login .split {
     display: flex;
 }
+
+.login .error {
+    color: #f44336;
+    font-style: italic;
+}

@@ -9,6 +9,7 @@ export default function Root() {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const [error, setError] = useState(0);
 
     async function loginUser(credentials) {
         
@@ -28,8 +29,17 @@ export default function Root() {
     }
 
     const handleSubmit = async e => {
+        setError(0);
 
-        if(name != "" && password != ""){
+        if (name == "") {
+            e.preventDefault();
+            //navigate('/connexion');
+            setError(1);
+        } else if (password == "") {
+            e.preventDefault();
+            //navigate('/connexion');
+            setError(2);
+        } else {
             e.preventDefault();
 
             const res = await loginUser({
@@ -38,44 +48,38 @@ export default function Root() {
             });
 
             // Navigation après la communication avec le serveur
-            try{
-                if(res !== 200){
-                    console.log("new error")
-                    throw new Error("Problème de connexion !")
-                }
-                else{
-                    console.log("Connexion réussi")
-                    navigate('/')
-                }
-            }
-            catch(err){
-                console.log("get caught ma boy")
-                alert("ERREUR :\n Il semblerait que l'une de vos informations de connexion soit erronée")
-                setName("")
-                setPassword("")
-                navigate('/connexion');
-            }
-        }
-        else{
-            e.preventDefault();
-            alert("ERREUR :\n Il semblerait qu'il manque l'une de vos informations de connexion")
-            navigate('/connexion');
-        }
+            if (res !== 200) {
+                console.log("Connnexion impossible - 2")
 
-        
+                setError(3);
+                setPassword("")
+                //navigate('/connexion');
+            } else {
+                console.log("Connexion réussi")
+                navigate('/')
+            }
+        }
     }
+
+    function renderError() {
+        switch (error) {
+            case 1:
+                return <div className="error">Veillez renseigner le nom d'utilisateur !</div>;
+            case 2:
+                return <div className="error">Veillez renseigner le mot de passe !</div>;
+            case 3:
+                return <div className="error">Votre nom d'utilisateur ou votre mot de passe est incorrect !</div>;
+        }
+    };
 
     return (
         <div>
-            <Form 
-            className="login" 
-            method='post'
-            onSubmit={handleSubmit}
-              >
+            <Form className="login" method='post'onSubmit={handleSubmit}>
                 <h1>Connexion</h1>
                 <hr/>
                 <InputGroup>
                     <div className="column">
+                        {renderError()}
                         <p className="label">Nom d'utilisateur</p>
                         <input className="text" type={"text"} value={name} onChange={(e) => setName(e.target.value)}></input>
                         <p className="label">Mot de passe</p>
