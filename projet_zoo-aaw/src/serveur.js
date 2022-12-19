@@ -1,4 +1,5 @@
 require('dotenv').config()
+const crypto = require("crypto")
 const express = require("express");
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -13,7 +14,12 @@ const {Pool, Client} = require('pg')
 // Temporaire, à remplacer par un ajout en BD
 const tokens = []
 
-console.log()
+// Generic method to generate a UUID v4 https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid
+function uuidv4() {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+}
 
 // Données de connexion pour la BD
 const pool = new Pool({
@@ -148,6 +154,40 @@ app.post("/api/connect", (req, res, next)=>{
       res.sendStatus(404)
     }
   })
+
+});
+
+
+app.post("/api/register", (req, res, next)=>{
+    console.log("[LOG] : Register")
+
+    const user = req.body
+
+    // Création de la requête
+    const queryFindOne = {
+        name: 'fetch-user',
+        text: 'SELECT count(*) FROM public."USERS" where "NAME" = $1',
+        values: [user.name]
+    }
+
+    pool.query(queryFindOne, (err, result) => {
+        if(result.rows.length !== 0){
+            if (parseInt(result.rows[0]["count"]) === 0) {
+                const queryInsertOne = {
+                    name: 'add-user',
+                    text: 'INSERT INTO public."USERS" ("ID", "NAME", "PASSWORD", "EMAIL") VALUES  ($1, $2, $3, $4)',
+                    values: [uuidv4(), user.name, user.hash, user.email_f]
+                }
+                pool.query(queryInsertOne)
+                res.sendStatus(201)
+            } else {
+                res.sendStatus(403)
+            }
+        }
+        else{
+            res.sendStatus(404)
+        }
+    })
 
 });
 

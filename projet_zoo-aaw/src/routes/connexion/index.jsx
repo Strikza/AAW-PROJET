@@ -38,7 +38,6 @@ export default function Root() {
         } else if (password == "") {
             setError(2);
         } else {
-
             const hash = SHA256(password).toString();
             const res = await loginUser({
                 name,
@@ -50,7 +49,6 @@ export default function Root() {
                 setError(3);
                 setPassword("")
             } else {
-                console.log("Connexion réussi")
                 navigate('/')
             }
         }
