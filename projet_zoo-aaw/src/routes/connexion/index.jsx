@@ -1,6 +1,7 @@
 import { Link, Form, useNavigate } from 'react-router-dom';
 import { InputGroup } from 'react-bootstrap';
 import React, { useState } from "react";
+import SHA256 from "crypto-js/sha256";
 
 import '../../css/form.css'
 
@@ -30,30 +31,24 @@ export default function Root() {
 
     const handleSubmit = async e => {
         setError(0);
+        e.preventDefault();
 
         if (name == "") {
-            e.preventDefault();
-            //navigate('/connexion');
             setError(1);
         } else if (password == "") {
-            e.preventDefault();
-            //navigate('/connexion');
             setError(2);
         } else {
-            e.preventDefault();
 
+            const hash = SHA256(password).toString();
             const res = await loginUser({
                 name,
-                password
+                hash
             });
 
             // Navigation après la communication avec le serveur
             if (res !== 200) {
-                console.log("Connnexion impossible - 2")
-
                 setError(3);
                 setPassword("")
-                //navigate('/connexion');
             } else {
                 console.log("Connexion réussi")
                 navigate('/')

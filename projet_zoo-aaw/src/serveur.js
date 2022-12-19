@@ -129,7 +129,7 @@ app.post("/api/connect", (req, res, next)=>{
   const queryFetchOne = {
     name: 'fetch-user',
     text: 'SELECT * FROM public."USERS" where "NAME" = $1 and "PASSWORD" = $2',
-    values: [user.name, user.password]  
+    values: [user.name, user.hash]
   }
 
   pool.query(queryFetchOne, (err, result) => {
