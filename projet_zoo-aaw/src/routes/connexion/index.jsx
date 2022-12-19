@@ -45,7 +45,7 @@ export default function Root() {
                 }
                 else{
                     console.log("Connexion réussi")
-                    navigate('/accueil')
+                    navigate('/')
                 }
             }
             catch(err){
