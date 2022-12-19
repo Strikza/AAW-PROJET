@@ -7,7 +7,7 @@ INSERT INTO public."USERS"(
     "ID", "NAME", "PASSWORD", "PERMISSION")
 VALUES 
     ('91c56141-6e8a-4c1c-a292-ccdcd6b5c481', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin'),
-    ('db75ed15-34a4-43a1-a2e8-86a27dbd39f6', 'user', '04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb', 'user');
+    ('db75ed15-34a4-43a1-a2e8-86a27dbd39f6', 'user', '04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb', DEFAULT);
 
 INSERT INTO public."ANIMALS"(
     "ID", "NAME", "DESC", "URL", "X", "Y")

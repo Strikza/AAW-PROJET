@@ -23,7 +23,7 @@ CREATE TABLE public."USERS"
     "NAME" character varying NOT NULL,
     "PASSWORD" character varying NOT NULL,
     "EMAIL" character varying,
-    "PERMISSION" character varying NOT NULL,
+    "PERMISSION" character varying NOT NULL DEFAULT 'user'::character varying,
     PRIMARY KEY ("ID")
 );
 
