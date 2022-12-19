@@ -5,7 +5,7 @@ import "../css/header.css"
 export default function Menu() {
     return (
             <header>
-                <Link to={"/accueil"}>
+                <Link to={"/"}>
                     <img src="../../annexe/Accueil/lien_accueil.png" className="menu_img" alt="Retour accueil"></img>
                 </Link>
                 <nav>
