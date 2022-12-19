@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express");
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -12,13 +13,15 @@ const {Pool, Client} = require('pg')
 // Temporaire, à remplacer par un ajout en BD
 const tokens = []
 
+console.log()
+
 // Données de connexion pour la BD
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'zoo_db',
-  password: 'PgAdminsam0627',
-  port: 5432,
+    host: process.env.HOST,
+    database: process.env.DATABASE,
+    port: process.env.PORT,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
 })
 
 
@@ -39,7 +42,7 @@ app.use((req, res, next)=>{
       const queryFetchOne = {
         name: 'fetch-user-connected',
         text: 'SELECT * FROM public."USERS" where "ID" = $1',
-        values: [token_f.idUser]  
+        values: [token_f.idUser]
       }
 
       pool.query(queryFetchOne, (err, result) => {
