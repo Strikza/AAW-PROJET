@@ -16,7 +16,7 @@ const tokens = []
 
 // Generic method to generate a UUID v4 https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid
 function uuidv4() {
-    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
     );
 }
@@ -32,146 +32,128 @@ const pool = new Pool({
 
 
 // Vérification de connection déjà établie
-app.use((req, res, next)=>{
-  let cookie = req.cookies["TOLKIEN_CONNECTED"]
-  
-  if(cookie){
-    console.log("[LOG] : Cookie value = ", cookie)
-    
-    // à remplacer par une recherche en BD
-    let token_f = tokens[0]
+app.use((req, res, next) => {
+    let cookie = req.cookies["TOLKIEN_CONNECTED"]
 
-    if(token_f){
-      console.log("[LOG] : Token trouvé")
+    if (cookie) {
+        console.log("[LOG] : Cookie value = ", cookie)
 
-      // Création de la requête
-      const queryFetchOne = {
-        name: 'fetch-user-connected',
-        text: 'SELECT * FROM public."USERS" where "ID" = $1',
-        values: [token_f.idUser]
-      }
+        // à remplacer par une recherche en BD
+        let token_f = tokens[0]
 
-      pool.query(queryFetchOne, (err, result) => {
-        //let user_bd = JSON.parse(JSON.stringify(result.rows[0]))
-        req.user = JSON.parse(JSON.stringify(result.rows[0]))
-      })
+        if (token_f) {
+            console.log("[LOG] : Token trouvé")
 
+            pool.query({
+                name: 'fetch-user-connected',
+                text: 'SELECT * FROM public."USERS" where "ID" = $1',
+                values: [token_f.idUser]
+            }, (err, result) => {
+                //let user_bd = JSON.parse(JSON.stringify(result.rows[0]))
+                req.user = JSON.parse(JSON.stringify(result.rows[0]))
+            })
+
+        } else {
+            // Supprime le cookie si le token n'existe pas
+            res.clearCookie("TOLKIEN_CONNECTED")
+        }
+
+    } else {
+        console.log("[LOG] : Aucun token trouvé")
+        // à remplacer par une supression en BD (ssi elle existe)
+        tokens.pop()
     }
-    else{
-      // Supprime le cookie si le token n'existe pas
-      res.clearCookie("TOLKIEN_CONNECTED")
-    }
 
-  }
-  else{
-    console.log("[LOG] : Aucun token trouvé")
-    // à remplacer par une supression en BD (ssi elle existe)
-    tokens.pop()
-  }
-
-  // Sert à attendre que la requête sur la base de données se termine
-  setTimeout(function(){
-    next()
-  }, 10)
+    // Sert à attendre que la requête sur la base de données se termine
+    setTimeout(function () {
+        next()
+    }, 10)
 })
 
 
 app.get('/', (req, res) => {
     animals()
-    .then(response => {
-      res.status(200).send(response);
-    })
-    .catch(error => {
-      res.status(500).send(error);
-    })
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
 })
 
 
 // Appel de tous les animaux
-app.get("/api/animals", (req, res, next)=>{
+app.get("/api/animals", (req, res, next) => {
     console.log("[LOG] : Page des animaux")
 
     let user = req.user
 
-    if(user){
-      console.log("[LOG] : User conneced : ", user)
+    if (user) {
+        console.log("[LOG] : User conneced : ", user)
     }
 
-    // Création de la requête
-    const queryFetchAll = {
-      name: 'fetch-animals',
-      text: 'SELECT * FROM public."ANIMALS"',
-    }
-    
-    pool.query(queryFetchAll, (err, result) => {
-      res.send(result.rows)
+    pool.query({
+        name: 'fetch-animals',
+        text: 'SELECT * FROM public."ANIMALS"',
+    }, (err, result) => {
+        res.send(result.rows)
     })
 });
 
 
 // Appel d'un animal
-app.get("/api/animals/:id", (req, res, next)=>{
-  console.log("[LOG] : Page de l'animal " + req.params.id)
+app.get("/api/animals/:id", (req, res, next) => {
+    console.log("[LOG] : Page de l'animal " + req.params.id)
 
-  // Création de la requête
-  const queryFetchOne = {
-    name: 'fetch-animal',
-    text: 'SELECT * FROM public."ANIMALS" where "ID" = $1',
-    values: [req.params.id],
-  }
-  
-  pool.query(queryFetchOne, (err, result) => {
-    res.send(result.rows)
-  })
+    pool.query({
+        name: 'fetch-animal',
+        text: 'SELECT * FROM public."ANIMALS" where "ID" = $1',
+        values: [req.params.id],
+    }, (err, result) => {
+        res.send(result.rows)
+    })
 });
 
 
-app.post("/api/connect", (req, res, next)=>{
-  console.log("[LOG] : Page des utilisateurs")
+app.post("/api/connect", (req, res, next) => {
+    console.log("[LOG] : Page des utilisateurs")
 
-  const user = req.body
+    const user = req.body
 
-  // Création de la requête
-  const queryFetchOne = {
-    name: 'fetch-user',
-    text: 'SELECT * FROM public."USERS" where "NAME" = $1 and "PASSWORD" = $2',
-    values: [user.name, user.hash]
-  }
+    pool.query({
+        name: 'fetch-user',
+        text: 'SELECT * FROM public."USERS" where "NAME" = $1 and "PASSWORD" = $2',
+        values: [user.name, user.hash]
+    }, (err, result) => {
+        if (result.rows.length !== 0) {
 
-  pool.query(queryFetchOne, (err, result) => {
-     if(result.rows.length !== 0){
+            // à remplacer par un ajout en BD
+            tokens.push({
+                idSession: 422022,
+                idUser: result.rows[0]["ID"]
+            })
 
-      // à remplacer par un ajout en BD
-      tokens.push({
-        idSession: 422022,
-        idUser: result.rows[0]["ID"]
-      })
-
-      res.cookie("TOLKIEN_CONNECTED", 422022, {maxAge: 20000})
-      res.sendStatus(200)
-    }
-    else{
-      res.sendStatus(404)
-    }
-  })
+            res.cookie("TOLKIEN_CONNECTED", 422022, {maxAge: 20000})
+            res.sendStatus(200)
+        } else {
+            res.sendStatus(404)
+        }
+    })
 
 });
 
 
-app.post("/api/register", (req, res, next)=>{
+app.post("/api/register", (req, res, next) => {
     console.log("[LOG] : Register")
 
     const user = req.body
 
-    // Création de la requête
-    const queryFindOne = {
+    pool.query({
         name: 'fetch-user',
         text: 'SELECT count(*) FROM public."USERS" where "NAME" = $1',
         values: [user.name]
-    }
-
-    pool.query(queryFindOne, (err, result) => {
-        if(result.rows.length !== 0){
+    }, (err, result) => {
+        if (result.rows.length !== 0) {
             if (parseInt(result.rows[0]["count"]) === 0) {
                 const queryInsertOne = {
                     name: 'add-user',
@@ -183,8 +165,7 @@ app.post("/api/register", (req, res, next)=>{
             } else {
                 res.sendStatus(403)
             }
-        }
-        else{
+        } else {
             res.sendStatus(404)
         }
     })
