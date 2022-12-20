@@ -53,8 +53,8 @@ CREATE TABLE public."TOKENS"
 (
     "ID" uuid NOT NULL,
     "USER_ID" uuid NOT NULL,
-    "TIMESTAMP" date NOT NULL,
-    PRIMARY KEY ("ID"),
+    "TIMESTAMP" timestamp with time zone NOT NULL,
+    PRIMARY KEY ("USER_ID"),
     CONSTRAINT "LOCAL_USER_ID" FOREIGN KEY ("USER_ID")
         REFERENCES public."USERS" ("ID") MATCH SIMPLE
         ON UPDATE NO ACTION

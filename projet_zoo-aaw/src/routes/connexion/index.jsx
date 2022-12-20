@@ -1,4 +1,4 @@
-import { Link, Form, useNavigate } from 'react-router-dom';
+import {Link, Form, useNavigate, Navigate} from 'react-router-dom';
 import { InputGroup } from 'react-bootstrap';
 import React, { useState } from "react";
 import SHA256 from "crypto-js/sha256";
@@ -6,6 +6,10 @@ import SHA256 from "crypto-js/sha256";
 import '../../css/form.css'
 
 export default function Root() {
+    /*
+    if (fetch("/api/login").then((response) => response.json())) {
+        return <Navigate to="/"/>;
+    }*/
 
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
@@ -13,7 +17,7 @@ export default function Root() {
     const [error, setError] = useState(0);
 
     async function loginUser(credentials) {
-        
+
         let resp;
 
         await fetch("/api/connect", {
@@ -23,9 +27,9 @@ export default function Root() {
             },
             body: JSON.stringify(credentials)
         })
-        .then((res) => {
-            resp =  res.status
-        })
+            .then((res) => {
+                resp = res.status
+            })
         return resp
     }
 
@@ -33,9 +37,9 @@ export default function Root() {
         setError(0);
         e.preventDefault();
 
-        if (name == "") {
+        if (name === "") {
             setError(1);
-        } else if (password == "") {
+        } else if (password === "") {
             setError(2);
         } else {
             const hash = SHA256(password).toString();
@@ -67,16 +71,18 @@ export default function Root() {
 
     return (
         <div>
-            <Form className="login" method='post'onSubmit={handleSubmit}>
+            <Form className="login" method='post' onSubmit={handleSubmit}>
                 <h1>Connexion</h1>
                 <hr/>
                 <InputGroup>
                     <div className="column">
                         {renderError()}
                         <p className="label">Nom d'utilisateur</p>
-                        <input className="text" type={"text"} value={name} onChange={(e) => setName(e.target.value)}></input>
+                        <input className="text" type={"text"} value={name}
+                               onChange={(e) => setName(e.target.value)}></input>
                         <p className="label">Mot de passe</p>
-                        <input className="text" type={"password"} value={password} onChange={(e) => setPassword(e.target.value)}></input>
+                        <input className="text" type={"password"} value={password}
+                               onChange={(e) => setPassword(e.target.value)}></input>
                     </div>
                     <button className="button" type="submit" value="Se connecter">Se connecter</button>
                 </InputGroup>
@@ -87,4 +93,4 @@ export default function Root() {
             </Form>
         </div>
     );
-  }
+}

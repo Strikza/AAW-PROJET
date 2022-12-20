@@ -18,6 +18,7 @@ function uuidv4() {
     );
 }
 
+
 // Données de connexion pour la BD
 const pool = new Pool({
     host: process.env.HOST,
@@ -29,43 +30,85 @@ const pool = new Pool({
 
 
 // Vérification de connection déjà établie
+
+// app.use((req, res, next) => {
+//     const cookie = req.cookies["token"]
+//
+//     if (cookie) {
+//         console.log("[LOG] : Cookie value = ", cookie)
+//
+//         // à remplacer par une recherche en BD
+//         let token_f = null // token[0]
+//
+//         if (token_f) {
+//             console.log("[LOG] : Token trouvé")
+//
+//             pool.query({
+//                 name: 'fetch-user-connected',
+//                 text: 'SELECT * FROM public."USERS" where "ID" = $1',
+//                 values: [token_f.idUser]
+//             }, (err, result) => {
+//                 //let user_bd = JSON.parse(JSON.stringify(result.rows[0]))
+//                 req.user = JSON.parse(JSON.stringify(result.rows[0]))
+//             })
+//
+//         } else {
+//             // Supprime le cookie si le token n'existe pas
+//             res.clearCookie("token")
+//         }
+//
+//     } else {
+//         console.log("[LOG] : Aucun token trouvé")
+//         // à remplacer par une supression en BD (ssi elle existe)
+//         //tokens.pop()
+//     }
+//
+//     // Sert à attendre que la requête sur la base de données se termine
+//     setTimeout(function () {
+//         next()
+//     }, 10)
+// })
+
+
+
+/*
 app.use((req, res, next) => {
     const cookie = req.cookies["token"]
 
     if (cookie) {
-        console.log("[LOG] : Cookie value = ", cookie)
+        pool.query({
+            name: 'find-token',
+            text: 'SELECT "USER_ID" FROM public."TOKENS" WHERE "ID" = $1 AND "TIMESTAMP" > NOW() - INTERVAL \'1m\'',
+            values: [cookie]
+        }, (err, result) => {
+            console.log(result)
+            if (result.rows.length !== 0) {const value = uuidv4();
 
-        // à remplacer par une recherche en BD
-        let token_f = null // token[0]
+                pool.query({
+                    name: 'add-token',
+                    text: 'INSERT INTO public."TOKENS" ("ID", "USER_ID", "TIMESTAMP") VALUES  ($1, $2, NOW())',
+                    values: [value, result.rows[0]["ID"]]
+                });
 
-        if (token_f) {
-            console.log("[LOG] : Token trouvé")
+                res.cookie("token", value)
 
-            pool.query({
-                name: 'fetch-user-connected',
-                text: 'SELECT * FROM public."USERS" where "ID" = $1',
-                values: [token_f.idUser]
-            }, (err, result) => {
-                //let user_bd = JSON.parse(JSON.stringify(result.rows[0]))
-                req.user = JSON.parse(JSON.stringify(result.rows[0]))
-            })
 
-        } else {
-            // Supprime le cookie si le token n'existe pas
-            res.clearCookie("token")
-        }
 
+
+                res.sendStatus(200)
+            } else {
+                res.sendStatus(404)
+            }
+            next();
+        });
     } else {
-        console.log("[LOG] : Aucun token trouvé")
-        // à remplacer par une supression en BD (ssi elle existe)
-        //tokens.pop()
+        next();
     }
+});
+*/
 
-    // Sert à attendre que la requête sur la base de données se termine
-    setTimeout(function () {
-        next()
-    }, 10)
-})
+
+
 
 
 // Appel de tous les animaux
@@ -101,6 +144,21 @@ app.get("/api/animals/:id", (req, res, next) => {
 });
 
 
+app.get("/api/login", (req, res, next) => {
+
+    const value = req.cookies["token"]
+
+    pool.query({
+        name: 'get-user',
+        text: 'SELECT * FROM public."TOKENS" WHERE "ID" = $1 AND "TIMESTAMP" > NOW() - INTERVAL \'20s\'',
+        values: [value]
+    }, (err, result) => {
+        console.log(result.rows.length)
+        res.send(result.rows.length === 0 ? null : result.rows)
+    })
+});
+
+
 app.post("/api/connect", (req, res, next) => {
     console.log("[LOG] : Page des utilisateurs")
 
@@ -112,21 +170,22 @@ app.post("/api/connect", (req, res, next) => {
         values: [user.name, user.hash]
     }, (err, result) => {
         if (result.rows.length !== 0) {
-
+            const user_id = result.rows[0]["ID"];
             const value = uuidv4();
-
+            //NSERT INTO public."TOKENS" ("ID", "USER_ID", "TIMESTAMP") VALUES  ($1, $2, NOW())
             pool.query({
-                name: 'add-token',
-                text: 'INSERT INTO public."TOKENS" ("ID", "USER_ID", "TIMESTAMP") VALUES  ($1, $2, NOW())',
-                values: [value, result.rows[0]["ID"]]
+                name: 'upsert-token',
+                text: 'INSERT INTO public."TOKENS" ("ID", "USER_ID", "TIMESTAMP") VALUES ($1, $2, NOW()) ON CONFLICT ("USER_ID") DO UPDATE SET "ID" = $1, "TIMESTAMP" = NOW()',
+                values: [value, user_id]
+            }, (err, result) => {
+                res.cookie("token", value) // option {maxAge: 20000}
+                res.sendStatus(200)
             });
-
-            res.cookie("token", value) // option {maxAge: 20000}
-            res.sendStatus(200)
         } else {
             res.sendStatus(404)
         }
-    })
+
+    });
 });
 
 
