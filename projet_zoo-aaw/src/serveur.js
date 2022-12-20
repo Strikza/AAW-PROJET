@@ -9,10 +9,7 @@ app.use("/", express.static("public"))
 app.use(express.json())
 app.use(cookieParser());
 
-const {Pool, Client} = require('pg')
-
-// Temporaire, à remplacer par un ajout en BD
-const tokens = []
+const {Pool} = require('pg')
 
 // Generic method to generate a UUID v4 https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid
 function uuidv4() {
@@ -33,13 +30,13 @@ const pool = new Pool({
 
 // Vérification de connection déjà établie
 app.use((req, res, next) => {
-    let cookie = req.cookies["TOLKIEN_CONNECTED"]
+    const cookie = req.cookies["token"]
 
     if (cookie) {
         console.log("[LOG] : Cookie value = ", cookie)
 
         // à remplacer par une recherche en BD
-        let token_f = tokens[0]
+        let token_f = null // token[0]
 
         if (token_f) {
             console.log("[LOG] : Token trouvé")
@@ -55,30 +52,19 @@ app.use((req, res, next) => {
 
         } else {
             // Supprime le cookie si le token n'existe pas
-            res.clearCookie("TOLKIEN_CONNECTED")
+            res.clearCookie("token")
         }
 
     } else {
         console.log("[LOG] : Aucun token trouvé")
         // à remplacer par une supression en BD (ssi elle existe)
-        tokens.pop()
+        //tokens.pop()
     }
 
     // Sert à attendre que la requête sur la base de données se termine
     setTimeout(function () {
         next()
     }, 10)
-})
-
-
-app.get('/', (req, res) => {
-    animals()
-        .then(response => {
-            res.status(200).send(response);
-        })
-        .catch(error => {
-            res.status(500).send(error);
-        })
 })
 
 
@@ -122,31 +108,32 @@ app.post("/api/connect", (req, res, next) => {
 
     pool.query({
         name: 'fetch-user',
-        text: 'SELECT * FROM public."USERS" where "NAME" = $1 and "PASSWORD" = $2',
+        text: 'SELECT "ID" FROM public."USERS" where "NAME" = $1 and "PASSWORD" = $2',
         values: [user.name, user.hash]
     }, (err, result) => {
         if (result.rows.length !== 0) {
 
-            // à remplacer par un ajout en BD
-            tokens.push({
-                idSession: 422022,
-                idUser: result.rows[0]["ID"]
-            })
+            const value = uuidv4();
 
-            res.cookie("TOLKIEN_CONNECTED", 422022, {maxAge: 20000})
+            pool.query({
+                name: 'add-token',
+                text: 'INSERT INTO public."TOKENS" ("ID", "USER_ID", "TIMESTAMP") VALUES  ($1, $2, NOW())',
+                values: [value, result.rows[0]["ID"]]
+            });
+
+            res.cookie("token", value) // option {maxAge: 20000}
             res.sendStatus(200)
         } else {
             res.sendStatus(404)
         }
     })
-
 });
 
 
 app.post("/api/register", (req, res, next) => {
     console.log("[LOG] : Register")
 
-    const user = req.body
+    const user = req.body;
 
     pool.query({
         name: 'fetch-user',
@@ -155,22 +142,20 @@ app.post("/api/register", (req, res, next) => {
     }, (err, result) => {
         if (result.rows.length !== 0) {
             if (parseInt(result.rows[0]["count"]) === 0) {
-                const queryInsertOne = {
+                pool.query({
                     name: 'add-user',
                     text: 'INSERT INTO public."USERS" ("ID", "NAME", "PASSWORD", "EMAIL") VALUES  ($1, $2, $3, $4)',
                     values: [uuidv4(), user.name, user.hash, user.email_f]
-                }
-                pool.query(queryInsertOne)
-                res.sendStatus(201)
+                });
+                res.sendStatus(201);
             } else {
-                res.sendStatus(403)
+                res.sendStatus(403);
             }
         } else {
-            res.sendStatus(404)
+            res.sendStatus(404);
         }
-    })
-
+    });
 });
 
 
-app.listen(port)
+app.listen(port);
