@@ -7,7 +7,11 @@ import '../../css/form.css'
 
 export default function Root() {
     /*
-    if (fetch("/api/login").then((response) => response.json())) {
+    const login = fetch("/api/login");
+
+    console.log(login)
+
+    if (login !== null) {
         return <Navigate to="/"/>;
     }*/
 
@@ -53,7 +57,7 @@ export default function Root() {
                 setError(3);
                 setPassword("")
             } else {
-                navigate('/')
+                navigate('/favoris')
             }
         }
     }

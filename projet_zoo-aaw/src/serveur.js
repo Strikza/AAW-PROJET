@@ -95,7 +95,7 @@ app.use((req, res, next) => {
 
 
 
-                res.sendStatus(200)
+                res.sendStatus(200) // req.user (json copy)
             } else {
                 res.sendStatus(404)
             }
@@ -153,8 +153,15 @@ app.get("/api/login", (req, res, next) => {
         text: 'SELECT * FROM public."TOKENS" WHERE "ID" = $1 AND "TIMESTAMP" > NOW() - INTERVAL \'20s\'',
         values: [value]
     }, (err, result) => {
-        console.log(result.rows.length)
-        res.send(result.rows.length === 0 ? null : result.rows)
+        if (result.rows.length === 0) {
+            console.log(result.rows[0])
+            res.sendStatus(408)
+        } else {
+            res.send(result.rows[0])
+            console.log(result.rows[0])
+            // send INNER JOIN WITH USERS TABLE
+        }
+
     })
 });
 
@@ -172,13 +179,12 @@ app.post("/api/connect", (req, res, next) => {
         if (result.rows.length !== 0) {
             const user_id = result.rows[0]["ID"];
             const value = uuidv4();
-            //NSERT INTO public."TOKENS" ("ID", "USER_ID", "TIMESTAMP") VALUES  ($1, $2, NOW())
             pool.query({
                 name: 'upsert-token',
                 text: 'INSERT INTO public."TOKENS" ("ID", "USER_ID", "TIMESTAMP") VALUES ($1, $2, NOW()) ON CONFLICT ("USER_ID") DO UPDATE SET "ID" = $1, "TIMESTAMP" = NOW()',
                 values: [value, user_id]
             }, (err, result) => {
-                res.cookie("token", value) // option {maxAge: 20000}
+                res.cookie("token", value) // option {maxAge: temps en ms}
                 res.sendStatus(200)
             });
         } else {

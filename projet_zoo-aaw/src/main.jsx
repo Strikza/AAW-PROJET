@@ -7,7 +7,7 @@ import {
 
 // Main page
 import RootPage from "./routes/body";
-
+import Favorite from "./component/favorite"
 // Children pages
 import Accueil from "./routes/accueil";
 import Liste, { 
@@ -66,6 +66,11 @@ const router = createBrowserRouter([
       {
         path: "inscription",
         element: <Inscription/>,
+        errorElement: <ErrorPage/>,
+      },
+      {
+        path: "favoris",
+        element: <Favorite/>,
         errorElement: <ErrorPage/>,
       }
     ]
