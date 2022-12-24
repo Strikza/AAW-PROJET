@@ -1,10 +1,9 @@
 import { useRouteError } from "react-router-dom";
 
-import './error-page.css'
+import errorImg from "../../../../annexe/PageErreur/OhNonCringe.jpeg";
+import "../../../css/error.css"
 
-import errorImg from "/annexe/PageErreur/OhNonCringe.jpeg";
-
-export default function ErrorPage() {
+function Error() {
   const error = useRouteError();
   console.error(error);
 
@@ -21,3 +20,6 @@ export default function ErrorPage() {
     </div>
   );
 }
+
+
+export default Error;

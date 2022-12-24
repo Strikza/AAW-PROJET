@@ -3,11 +3,10 @@ import { InputGroup } from 'react-bootstrap';
 import React, { useState } from "react";
 import SHA256 from "crypto-js/sha256";
 
-import '../../css/form.css'
-import '../../css/header.css'
-import '../../css/main.css'
+import "../../../css/form.css"
 
-export default function Root() {
+
+function Registration() {
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -127,5 +126,7 @@ export default function Root() {
             </Form>
         </div>
     );
-  }
-  
+}
+
+
+export default Registration;

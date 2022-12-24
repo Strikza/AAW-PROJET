@@ -1,32 +1,19 @@
-require('dotenv').config()
-const crypto = require("crypto")
 const express = require("express");
 const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
 
+
+const {upsetTokenByIdQuery, insertUserQuery, countNameQuery, selectUserByTokenQuery, selectUserByLoginQuery,
+    selectAnimalById, selectAllAnimals
+} = require("./js/db");
+const {uuidV4} = require("./js/tools");
+
+
 app.use("/", express.static("public"))
 app.use(express.json())
 app.use(cookieParser());
 
-const {Pool} = require('pg')
-
-// Generic method to generate a UUID v4 https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid
-function uuidv4() {
-    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-    );
-}
-
-
-// Données de connexion pour la BD
-const pool = new Pool({
-    host: process.env.HOST,
-    database: process.env.DATABASE,
-    port: process.env.PORT,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-})
 
 
 // Vérification de connection déjà établie
@@ -108,118 +95,74 @@ app.use((req, res, next) => {
 */
 
 
-
-
-
-// Appel de tous les animaux
 app.get("/api/animals", (req, res, next) => {
-    console.log("[LOG] : Page des animaux")
+    console.log("[LOG] : /api/animals")
 
-    let user = req.user
-
-    if (user) {
-        console.log("[LOG] : User conneced : ", user)
-    }
-
-    pool.query({
-        name: 'fetch-animals',
-        text: 'SELECT * FROM public."ANIMALS"',
-    }, (err, result) => {
-        res.send(result.rows)
-    })
+    selectAllAnimals()
+        .then((result) => {
+            res.send(result)
+        })
 });
 
 
-// Appel d'un animal
 app.get("/api/animals/:id", (req, res, next) => {
-    console.log("[LOG] : Page de l'animal " + req.params.id)
+    console.log("[LOG] : /api/animals/" + req.params.id)
 
-    pool.query({
-        name: 'fetch-animal',
-        text: 'SELECT * FROM public."ANIMALS" where "ID" = $1',
-        values: [req.params.id],
-    }, (err, result) => {
-        res.send(result.rows)
-    })
+    selectAnimalById(req.params.id)
+        .then((result) => {
+            res.send({animal: result})
+        })
 });
 
 
-app.get("/api/login", (req, res, next) => {
+app.get("/api/login", async (req, res, next) => {
+    console.log("[LOG] : /api/login")
 
-    const value = req.cookies["token"]
+    const token = req.cookies["token"]
 
-    pool.query({
-        name: 'get-user',
-        text: 'SELECT * FROM public."TOKENS" WHERE "ID" = $1 AND "TIMESTAMP" > NOW() - INTERVAL \'20s\'',
-        values: [value]
-    }, (err, result) => {
-        if (result.rows.length === 0) {
-            console.log(result.rows[0])
-            res.sendStatus(408)
-        } else {
-            res.send(result.rows[0])
-            console.log(result.rows[0])
-            // send INNER JOIN WITH USERS TABLE
-        }
-
-    })
+    if (token) {
+        selectUserByTokenQuery(token).then((result) => {
+            res.send({user: result});
+        })
+    } else {
+        res.send({user: null});
+    }
 });
 
 
 app.post("/api/connect", (req, res, next) => {
-    console.log("[LOG] : Page des utilisateurs")
+    console.log("[LOG] : /api/connect")
 
     const user = req.body
 
-    pool.query({
-        name: 'fetch-user',
-        text: 'SELECT "ID" FROM public."USERS" where "NAME" = $1 and "PASSWORD" = $2',
-        values: [user.name, user.hash]
-    }, (err, result) => {
-        if (result.rows.length !== 0) {
-            const user_id = result.rows[0]["ID"];
-            const value = uuidv4();
-            pool.query({
-                name: 'upsert-token',
-                text: 'INSERT INTO public."TOKENS" ("ID", "USER_ID", "TIMESTAMP") VALUES ($1, $2, NOW()) ON CONFLICT ("USER_ID") DO UPDATE SET "ID" = $1, "TIMESTAMP" = NOW()',
-                values: [value, user_id]
-            }, (err, result) => {
-                res.cookie("token", value) // option {maxAge: temps en ms}
-                res.sendStatus(200)
-            });
-        } else {
-            res.sendStatus(404)
-        }
-
-    });
+    selectUserByLoginQuery(user.name, user.hash)
+        .then(async (result) => {
+            if (result) {
+                const token = uuidV4();
+                upsetTokenByIdQuery(result["ID"], token)
+                res.cookie("token", token, {sameSite: "strict"})
+                res.send(result)
+            }
+        })
 });
 
 
 app.post("/api/register", (req, res, next) => {
-    console.log("[LOG] : Register")
+    console.log("[LOG] : /api/register")
 
     const user = req.body;
 
-    pool.query({
-        name: 'fetch-user',
-        text: 'SELECT count(*) FROM public."USERS" where "NAME" = $1',
-        values: [user.name]
-    }, (err, result) => {
-        if (result.rows.length !== 0) {
-            if (parseInt(result.rows[0]["count"]) === 0) {
-                pool.query({
-                    name: 'add-user',
-                    text: 'INSERT INTO public."USERS" ("ID", "NAME", "PASSWORD", "EMAIL") VALUES  ($1, $2, $3, $4)',
-                    values: [uuidv4(), user.name, user.hash, user.email_f]
-                });
-                res.sendStatus(201);
-            } else {
+    countNameQuery(user.name)
+        .then((result) => {
+            if (result) {
                 res.sendStatus(403);
+            } else {
+                insertUserQuery(uuidV4(), user.name, user.hash, user.email_f)
+                    .then(() => {
+                        res.sendStatus(201);
+                    })
             }
-        } else {
-            res.sendStatus(404);
-        }
-    });
+        })
 });
 
 

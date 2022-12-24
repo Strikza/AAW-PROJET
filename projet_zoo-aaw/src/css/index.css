@@ -5,10 +5,10 @@
 
 html, body {
     background-color: #e1e1e1;
+    font-family: Minecraftia, serif;
+
     padding: 0;
     margin: 0;
-
-    font-family: Minecraftia, serif;
 }
 
 .page {

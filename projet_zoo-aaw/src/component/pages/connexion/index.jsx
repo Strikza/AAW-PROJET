@@ -1,66 +1,44 @@
-import {Link, Form, useNavigate, Navigate} from 'react-router-dom';
+import {Link, Form, useNavigate} from 'react-router-dom';
 import { InputGroup } from 'react-bootstrap';
 import React, { useState } from "react";
 import SHA256 from "crypto-js/sha256";
 
-import '../../css/form.css'
+import "../../../css/form.css"
+import {doLogin, useAuthDispatch, useAuthState} from "../../authentification";
 
-export default function Root() {
-    /*
-    const login = fetch("/api/login");
+function Connection() {
 
-    console.log(login)
-
-    if (login !== null) {
-        return <Navigate to="/"/>;
-    }*/
+    const navigate = useNavigate();
+    const { id } = useAuthState();
+    const dispatch = useAuthDispatch();
 
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
     const [error, setError] = useState(0);
 
-    async function loginUser(credentials) {
 
-        let resp;
+    console.log("id : "+id)
 
-        await fetch("/api/connect", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(credentials)
-        })
-            .then((res) => {
-                resp = res.status
-            })
-        return resp
-    }
 
-    const handleSubmit = async e => {
-        setError(0);
+    const handleSubmit = e => {
         e.preventDefault();
+        setError(0);
 
         if (name === "") {
             setError(1);
         } else if (password === "") {
             setError(2);
         } else {
-            const hash = SHA256(password).toString();
-            const res = await loginUser({
-                name,
-                hash
-            });
-
-            // Navigation après la communication avec le serveur
-            if (res !== 200) {
+            doLogin(dispatch, {name, hash: SHA256(password).toString()})
+            if (id) {
+                navigate('/favoris')
+            } else {
                 setError(3);
                 setPassword("")
-            } else {
-                navigate('/favoris')
             }
         }
     }
+
 
     function renderError() {
         switch (error) {
@@ -71,7 +49,8 @@ export default function Root() {
             case 3:
                 return <div className="error">Votre nom d'utilisateur ou votre mot de passe est incorrect !</div>;
         }
-    };
+    }
+
 
     return (
         <div>
@@ -98,3 +77,6 @@ export default function Root() {
         </div>
     );
 }
+
+
+export default Connection;

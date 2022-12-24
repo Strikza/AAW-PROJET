@@ -1,0 +1,83 @@
+.global-container {
+    margin: 5px 100px 15px 100px;
+    width: 100%;
+}
+
+.details {
+    width: fit-content;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.animals-container {
+    width: 100%;
+}
+
+.error-animals {
+    font-style: italic;
+}
+
+.animals-container ul {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+
+    list-style-type: none;
+
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+}
+
+.animal-card {
+    background-color: #282828;
+    border: 2px solid #282828;
+    border-radius: 25px;
+
+    width: 175px;
+    height: fit-content;
+
+    padding: 30px;
+    margin: 10px;
+}
+
+.preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 125px;
+    height: 125px;
+
+    margin: auto;
+}
+
+.preview img {
+    max-height: 100%;
+    width: auto;
+}
+
+.card-name {;
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+}
+
+.h-separator {
+    border-top: 2px solid #ffffff;
+
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.animals-title {
+    text-align: center;
+
+    font-size: 3em;
+    font-weight: bold;
+
+    margin-bottom: 50px;
+}

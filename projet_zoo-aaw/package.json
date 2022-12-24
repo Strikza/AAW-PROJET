@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start-web": "parcel ./src/main.jsx",
+    "start-web": "parcel src/index.jsx",
     "start-server": "nodemon ./src/serveur.js"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "pg": "^8.8.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
+    "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.2",
     "sequelize": "^6.25.3",
